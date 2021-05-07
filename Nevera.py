@@ -20,16 +20,15 @@ def neveraT():
     stdGrades = 2
     temperature = np.random.normal(meanGrades, stdGrades)
 
-    while True:
-        payload = {
-            "temperatura_nevera": str(temperature)
-        }
-        item = {
-            "data": str("Temperatura: " + str(temperature))
-        }
-        client.publish('casa/cocina/temperatura_nevera', json.dumps(payload), qos=0)
-        query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(1, %(data)s);"""
-        DataBase.on_connect_db(query, item)
+    payload = {
+        "temperatura_nevera": str(temperature)
+    }
+    item = {
+        "data": str("Temperatura: " + str(temperature))
+    }
+    client.publish('casa/cocina/temperatura_nevera', json.dumps(payload), qos=0)
+    query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(1, %(data)s);"""
+    DataBase.on_connect_db(query, item)
 
 
 def neveraI():
@@ -41,16 +40,15 @@ def neveraI():
     superior = 10
     ice = np.random.uniform(inferior, superior)
 
-    while True:
-        payload = {
-            "capacidad_hielo_nevera": str(ice)
-        }
-        item = {
-            "data": str("Capacidad hielo: " + str(ice))
-        }
-        client.publish('casa/cocina/temperatura_nevera', json.dumps(payload), qos=0)
-        query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(2, %(data)s);"""
-        DataBase.on_connect_db(query, item)
+    payload = {
+        "capacidad_hielo_nevera": str(ice)
+    }
+    item = {
+        "data": str("Capacidad hielo: " + str(ice))
+    }
+    client.publish('casa/cocina/temperatura_nevera', json.dumps(payload), qos=0)
+    query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(2, %(data)s);"""
+    DataBase.on_connect_db(query, item)
 
 
 def main():
