@@ -30,8 +30,6 @@ def neveraT():
         client.publish('casa/cocina/temperatura_nevera', json.dumps(payload), qos=0)
         query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(1, %(data)s);"""
         DataBase.on_connect_db(query, item)
-        print(payload)
-        time.sleep(300)
 
 
 def neveraI():
@@ -52,8 +50,7 @@ def neveraI():
         }
         client.publish('casa/cocina/temperatura_nevera', json.dumps(payload), qos=0)
         query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(2, %(data)s);"""
-        DataBase.on_connect_db(query, payload)
-        time.sleep(600)
+        DataBase.on_connect_db(query, item)
 
 
 def main():
