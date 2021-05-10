@@ -31,16 +31,15 @@ def main():
         ice = int(np.random.uniform(inferior, superior))
 
         if res % 300 == 0:
-            payload = {
-                "reporte": temperature,
-                "tiempo": res
-            }
             item = {
                 "data": str("Reporte: " + str(temperature) + " " + "Tiempo: " + str(res))
             }
+            payload = {
+                "reporte": temperature,
+                "tiempo": res,
+                "item": item
+            }
             client.publish('casa/cocina/temperatura_nevera', json.dumps(payload), qos=0)
-            query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(1, %(data)s);"""
-            Suscriptor.on_connect_db(query, item)
 
         if res % 600 == 0:
             payload = {

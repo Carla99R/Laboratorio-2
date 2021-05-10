@@ -35,6 +35,26 @@ def on_message(client, userdata, message):
     print('topic: %s' % message.topic)
     print('payload: %s' % message.payload)
     print('qos: %d' % message.qos)
+    content = message.payload
+    jsondecoded = json.loads(content.decode('utf-8'))
+    query = crear_query(message.topic)
+    on_connect_db(query, jsondecoded["item"])
+
+
+def crear_query(topic):
+    query = """"""
+    if topic == "casa/cocina/temperatura_nevera":
+        query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(1, %(data)s);"""
+    if topic == "casa/cocina/temperatura_olla":
+        query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(2, %(data)s);"""
+    if topic == "casa/sala/contador_personas":
+        query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(3, %(data)s);"""
+    if topic == "casa/sala/alexa_echo":
+        query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(4, %(data)s);"""
+    if topic == "casa/baño/nivel_tanque":
+        query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(5, %(data)s);"""
+
+    return query
 
 
 def main():

@@ -24,27 +24,27 @@ def main():
         cant_personas = int(np.random.uniform(inferior, superior))
         res = int(variable - variable2)
         if cant_personas > 5:
-            payload = {
-                "reporte": cant_personas,
-                "alerta": alert,
-                "tiempo": res
-            }
             item = {
                 "data": str("Reporte: " + str(cant_personas) + " " + "Alerta: " + alert + " " + "Tiempo: " + str(res))
             }
-            query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(4, %(data)s);"""
-        else:
             payload = {
                 "reporte": cant_personas,
-                "tiempo": res
+                "alerta": alert,
+                "tiempo": res,
+                "item": item
             }
+
+        else:
             item = {
                 "data": str("Reporte: " + str(cant_personas) + " " + "Tiempo: " + str(res))
             }
-            query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(4, %(data)s);"""
+            payload = {
+                "reporte": cant_personas,
+                "tiempo": res,
+                "item": item
+            }
 
         client.publish('casa/sala/contador_persona', json.dumps(payload), qos=0)
-        Suscriptor.on_connect_db(query, item)
         time.sleep(60)
         variable = time.time()
 

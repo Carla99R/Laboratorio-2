@@ -31,18 +31,16 @@ def main():
         else:
             print(" Ciudad no encontrada")
 
+        item = {
+            "data": str("Reporte: " + str(current_temperature) + "K" + " " + "Tiempo: " + str(res))
+        }
         payload = {
             "reporte": current_temperature,
-            "tiempo": res
-        }
-
-        item = {
-            "data": str("Reporte: " + str(current_temperature)+"K" + " " + "Tiempo: " + str(res))
+            "tiempo": res,
+            "item": item
         }
 
         client.publish('casa/sala/alexa_echo', json.dumps(payload), qos=0)
-        query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(5, %(data)s);"""
-        Suscriptor.on_connect_db(query, item)
         time.sleep(300)
         variable = time.time()
 

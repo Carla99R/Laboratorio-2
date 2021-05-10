@@ -25,28 +25,28 @@ def main():
         res = int(variable - variable2)
         random = np.random.randint(0, 2)
         if random == 1:
-            if int(temperature) >= 100:
-                payload = {
-                    "reporte": temperature,
-                    "mensaje": message,
-                    "tiempo": res
-                }
+            if temperature >= 100:
                 item = {
                     "data": str("Reporte: " + str(temperature) + " " + "Mensaje: " + str(message) + " " + "Tiempo: " + str(res))
                 }
-                query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(3, %(data)s);"""
-            else:
                 payload = {
                     "reporte": temperature,
-                    "tiempo": res
+                    "mensaje": message,
+                    "tiempo": res,
+                    "item": item
                 }
+
+            else:
                 item = {
                     "data": str("Reporte: " + str(temperature) + " " + "Tiempo: " + str(res))
                 }
-                query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(3, %(data)s);"""
+                payload = {
+                    "reporte": temperature,
+                    "tiempo": res,
+                    "item": item
+                }
 
             client.publish('casa/cocina/temperatura_olla', json.dumps(payload), qos=0)
-            Suscriptor.on_connect_db(query, item)
         time.sleep(1)
         variable = time.time()
 

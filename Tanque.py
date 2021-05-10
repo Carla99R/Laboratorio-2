@@ -35,32 +35,26 @@ def reportar(indicador, tiempo):
     alertN = "Se acabo el agua"
 
     if indicador <= 50:
-        payload = {
-            "reporte": indicador,
-            "alerta": alertL
-        }
         item = {
             "data": str("Cantidad agua: " + str(indicador) + " " + "Alerta: " + alertL + " " + "Tiempo: " + str(tiempo))
         }
-
-        query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(6, %(data)s);"""
-        dataBase(query, item, client, payload)
-
-    if indicador == 0:
         payload = {
             "reporte": indicador,
-            "alerta": alertN
+            "alerta": alertL,
+            "item": item
         }
+    client.publish('casa/baño/nivel_tanque', json.dumps(payload), qos=0)
+
+    if indicador == 0:
         item = {
             "data": str("Cantidad agua: " + str(indicador) + " " + "Alerta: " + alertN + " " + "Tiempo: " + str(tiempo))
         }
-        query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(6, %(data)s);"""
-        dataBase(query, item, client, payload)
-
-
-def dataBase(query, item, client, payload):
+        payload = {
+            "reporte": indicador,
+            "alerta": alertN,
+            "item": item
+        }
     client.publish('casa/baño/nivel_tanque', json.dumps(payload), qos=0)
-    Suscriptor.on_connect_db(query, item)
 
 
 def main():
