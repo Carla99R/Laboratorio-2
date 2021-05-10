@@ -6,7 +6,7 @@ import time
 import numpy as np
 import json
 
-import DataBase
+import Suscriptor
 
 
 def main():
@@ -16,33 +16,39 @@ def main():
 
     inferior = 0
     superior = 150
-    temperature = np.random.uniform(inferior, superior)
-    message = "El agua ya hirvió"
+    message = "El agua ya hirvio"
 
+    variable = time.time()
+    variable2 = time.time()
     while True:
-        random = np.random.randint(0, 1)
+        temperature = int(np.random.uniform(inferior, superior))
+        res = int(variable - variable2)
+        random = np.random.randint(0, 2)
         if random == 1:
-            if int(temperature) == 100:
+            if int(temperature) >= 100:
                 payload = {
-                    "temperatura": str(temperature),
-                    "mensaje": message
+                    "reporte": temperature,
+                    "mensaje": message,
+                    "tiempo": res
                 }
                 item = {
-                    "data": str("Temperatura: " + str(temperature) + " " + "Mensaje: " + message)
+                    "data": str("Reporte: " + str(temperature) + " " + "Mensaje: " + str(message) + " " + "Tiempo: " + str(res))
                 }
                 query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(3, %(data)s);"""
             else:
                 payload = {
-                    "temperatura": str(temperature)
+                    "reporte": temperature,
+                    "tiempo": res
                 }
                 item = {
-                    "data": str("Temperatura: " + str(temperature))
+                    "data": str("Reporte: " + str(temperature) + " " + "Tiempo: " + str(res))
                 }
                 query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(3, %(data)s);"""
 
             client.publish('casa/cocina/temperatura_olla', json.dumps(payload), qos=0)
-            DataBase.on_connect_db(query, item)
+            Suscriptor.on_connect_db(query, item)
         time.sleep(1)
+        variable = time.time()
 
 
 if __name__ == '__main__':

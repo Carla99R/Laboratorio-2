@@ -6,7 +6,7 @@ import time
 import numpy as np
 import json
 
-import DataBase
+import Suscriptor
 
 
 def main():
@@ -16,31 +16,37 @@ def main():
 
     inferior = 0
     superior = 10
-    cant_personas = np.random.uniform(inferior, superior)
-    alert = "Hay más de 5 personas en la sala"
+    alert = "Hay mas de 5 personas en la sala"
 
+    variable = time.time()
+    variable2 = time.time()
     while True:
-        if int(cant_personas) > 5:
+        cant_personas = int(np.random.uniform(inferior, superior))
+        res = int(variable - variable2)
+        if cant_personas > 5:
             payload = {
-                "cantidad_personas": str(cant_personas),
-                "alerta": alert
+                "reporte": cant_personas,
+                "alerta": alert,
+                "tiempo": res
             }
             item = {
-                "data": str("Cantidad personas: " + str(cant_personas) + " " + "Alerta: " + alert)
+                "data": str("Reporte: " + str(cant_personas) + " " + "Alerta: " + alert + " " + "Tiempo: " + str(res))
             }
             query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(4, %(data)s);"""
         else:
             payload = {
-                "cantidad_personas": str(cant_personas)
+                "reporte": cant_personas,
+                "tiempo": res
             }
             item = {
-                "data": str("Cantidad personas: " + str(cant_personas))
+                "data": str("Reporte: " + str(cant_personas) + " " + "Tiempo: " + str(res))
             }
             query = """INSERT INTO suscripciones(tipo_suscripcion_id, suscripcion) VALUES(4, %(data)s);"""
 
         client.publish('casa/sala/contador_persona', json.dumps(payload), qos=0)
-        DataBase.on_connect_db(query, item)
+        Suscriptor.on_connect_db(query, item)
         time.sleep(60)
+        variable = time.time()
 
 
 if __name__ == '__main__':
